@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aniversários - T.U. Caboclo Ubirajara e Vovó Rita</title>
+  
+  <!-- Fontes Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* MODO ESCURO (Preto #000, Vermelho #8b0000, Dourado) */
+    [data-theme="dark"] {
+      --bg: #000000;
+      --surface: #141414;
+      --surface-card: #1c1c1c;
+      --text-primary: #f5f5f5;
+      --text-secondary: #a0a0a0;
+      --gold: #d4af37;
+      --gold-soft: rgba(212, 175, 55, 0.15);
+      --red: #8b0000;
+      --red-hover: #5c0000;
+      --border: #262626;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+    }
+
+    /* MODO CLARO (Fundo Bege Acinzentado, Azul, Dourado Escuro) */
+    [data-theme="light"] {
+      --bg: #e5e2dc; /* Bege acinzentado / areia suave */
+      --surface: #f7f6f2; /* Cartão gesso/off-white */
+      --surface-card: #ebe8e2;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --gold: #8d6e18; /* Dourado escuro */
+      --gold-soft: rgba(141, 110, 24, 0.12);
+      --red: #1d4ed8; /* Azul principal */
+      --red-hover: #1e40af; /* Azul hover */
+      --border: #d4d0c7;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      padding: 40px 16px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      flex: 1;
+      position: relative;
+    }
+
+    /* Botão Alternar Tema */
+    .theme-toggle-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .btn-theme {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-theme:hover {
+      border-color: var(--gold);
+    }
+
+    /* Cabeçalho */
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    header p {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+
+    /* Destaques (Hoje / Próximo) */
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .highlight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--red);
+    }
+
+    .highlight-card .label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .highlight-card .value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .highlight-card .subtext {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    /* Botão Toggle Cadastro (Celular) */
+    .btn-toggle-form {
+      display: none;
+      width: 100%;
+      background: var(--surface);
+      border: 1px dashed var(--gold);
+      color: var(--gold);
+      padding: 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      margin-bottom: 24px;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-toggle-form:hover {
+      background: var(--gold-soft);
+    }
+
+    /* Formulário */
+    .form-card {
+      background: var(--surface);
+      padding: 22px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .form-card h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--gold);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    .form-row {
+      margin-bottom: 12px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background-color: var(--surface-card);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 2px var(--gold-soft);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    button.btn-submit {
+      width: 100%;
+      background: var(--red);
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button.btn-submit:hover {
+      background: var(--red-hover);
+    }
+
+    button.btn-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      display: none;
+    }
+
+    button.btn-cancel:hover {
+      background: var(--surface-card);
+      color: var(--text-primary);
+    }
+
+    /* Lista por Mês */
+    .month-section {
+      margin-bottom: 24px;
+    }
+
+    .month-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold);
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--gold);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .member-item {
+      background: var(--surface);
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .member-name {
+      flex: 1;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .member-date {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--gold);
+      min-width: 55px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .actions {
+      display: flex;
+      gap: 6px;
+      margin-left: 4px;
+    }
+
+    .btn-action {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-edit:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .btn-delete:hover {
+      color: #ffffff;
+      background-color: var(--red);
+      border-color: var(--red);
+    }
+
+    .empty-state {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .loading, .empty {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      padding: 30px 0;
+    }
+
+    /* Rodapé */
+    footer {
+      margin-top: 40px;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+      width: 100%;
+      max-width: 520px;
+      letter-spacing: 0.5px;
+    }
+
+    /* REGRAS RESPONSIVAS PARA CELULAR */
+    @media (max-width: 600px) {
+      .btn-toggle-form {
+        display: block;
+      }
+
+      .form-card {
+        display: none;
+      }
+
+      .form-card.show-mobile {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Alternador de Tema -->
+    <div class="theme-toggle-container">
+      <button class="btn-theme" id="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-icon">☀️</span> <span id="theme-text">Modo Claro</span>
+      </button>
+    </div>
+
+    <header>
+      <h1>T.U. Caboclo Ubirajara e Vovó Rita</h1>
+      <p>Calendário de Aniversários</p>
+    </header>
+
+    <!-- Destaques -->
+    <div class="highlights-grid">
+      <div class="highlight-card">
+        <span class="label">Aniversariante de Hoje</span>
+        <div id="today-content" class="value">Carregando...</div>
+      </div>
+      <div class="highlight-card">
+        <span class="label">Próximo Aniversário</span>
+        <div id="next-content" class="value">Carregando...</div>
+      </div>
+    </div>
+
+    <!-- Botão visível apenas no Celular -->
+    <button class="btn-toggle-form" id="btn-toggle-form" onclick="toggleFormMobile()">
+      + Cadastrar Aniversariante
+    </button>
+
+    <!-- Formulário de Cadastro / Edição -->
+    <div class="form-card" id="form-card">
+      <h2 id="form-title">Novo Cadastramento</h2>
+      <form id="add-form">
+        <input type="hidden" id="edit-id" value="">
+        <div class="form-row">
+          <input type="text" id="name" placeholder="Nome do membro" required>
+        </div>
+        <div class="form-row">
+          <input type="text" id="date" placeholder="Dia e Mês (ex: 15/08)" maxlength="5" required>
+        </div>
+        <div class="btn-group">
+          <button type="submit" id="btn-submit" class="btn-submit">Cadastrar Membro</button>
+          <button type="button" id="btn-cancel" class="btn-cancel" onclick="resetForm()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Lista Completa -->
+    <div id="members-list">
+      <div class="loading">Carregando dados...</div>
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <footer>
+    Produzido por Nyllo Tech 2026
+  </footer>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCLfCY7VCgtW92f3Dlqst5yp6BTNqw5UuQ",
+      authDomain: "calendario-tucuvori.firebaseapp.com",
+      databaseURL: "https://calendario-tucuvori-default-rtdb.firebaseio.com",
+      projectId: "calendario-tucuvori",
+      storageBucket: "calendario-tucuvori.firebasestorage.app",
+      messagingSenderId: "364406314929",
+      appId: "1:364406314929:web:ec7e7709bec677690b4f90"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const membersRef = database.ref('membros');
+
+    const monthsNames = [
+      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+
+    // Alternar Tema Claro / Escuro
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeButton(newTheme);
+    }
+
+    function updateThemeButton(theme) {
+      const icon = document.getElementById('theme-icon');
+      const text = document.getElementById('theme-text');
+      
+      if (theme === 'dark') {
+        icon.innerText = '☀️';
+        text.innerText = 'Modo Claro';
+      } else {
+        icon.innerText = '🌙';
+        text.innerText = 'Modo Escuro';
+      }
+    }
+
+    // Carregar tema salvo
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeButton(savedTheme);
+
+    // Expandir / Ocultar Formulário no Celular
+    function toggleFormMobile() {
+      const formCard = document.getElementById('form-card');
+      const btnToggle = document.getElementById('btn-toggle-form');
+      
+      if (formCard.classList.contains('show-mobile')) {
+        formCard.classList.remove('show-mobile');
+        btnToggle.innerText = '+ Cadastrar Aniversariante';
+      } else {
+        formCard.classList.add('show-mobile');
+        btnToggle.innerText = '− Ocultar Formulário';
+      }
+    }
+
+    // Máscara DD/MM
+    const dateInput = document.getElementById('date');
+    dateInput.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length >= 3) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      }
+      e.target.value = value;
+    });
+
+    // Cadastrar ou Editar
+    document.getElementById('add-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const dateVal = document.getElementById('date').value.trim();
+      const editId = document.getElementById('edit-id').value;
+
+      const parts = dateVal.split('/');
+      if (parts.length !== 2) {
+        alert('Por favor, informe a data no formato DD/MM.');
+        return;
+      }
+
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10);
+
+      if (name && day >= 1 && day <= 31 && month >= 1 && month <= 12) {
+        if (editId) {
+          membersRef.child(editId).update({
+            name: name,
+            day: day,
+            month: month
+          });
+        } else {
+          membersRef.push({
+            name: name,
+            day: day,
+            month: month
+          });
+        }
+
+        resetForm();
+      } else {
+        alert('Data inválida! Verifique o dia (1-31) e o mês (1-12).');
+      }
+    });
+
+    // Preencher edição
+    function editMember(id, name, day, month) {
+      const formCard = document.getElementById('form-card');
+      formCard.classList.add('show-mobile');
+      document.getElementById('btn-toggle-form').innerText = '− Ocultar Formulário';
+
+      document.getElementById('edit-id').value = id;
+      document.getElementById('name').value = name;
+      
+      const dayStr = String(day).padStart(2, '0');
+      const monthStr = String(month).padStart(2, '0');
+      document.getElementById('date').value = `${dayStr}/${monthStr}`;
+
+      document.getElementById('form-title').innerText = 'Editar Aniversário';
+      document.getElementById('btn-submit').innerText = 'Salvar Alterações';
+      document.getElementById('btn-cancel').style.display = 'block';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Cancelar edição
+    function resetForm() {
+      document.getElementById('edit-id').value = '';
+      document.getElementById('name').value = '';
+      document.getElementById('date').value = '';
+
+      document.getElementById('form-title').innerText = 'Novo Cadastramento';
+      document.getElementById('btn-submit').innerText = 'Cadastrar Membro';
+      document.getElementById('btn-cancel').style.display = 'none';
+
+      const formCard = document.getElementById('form-card');
+      formCard.classList.remove('show-mobile');
+      document.getElementById('btn-toggle-form').innerText = '+ Cadastrar Aniversariante';
+    }
+
+    // Excluir
+    function deleteMember(id) {
+      if (confirm('Deseja remover este registro?')) {
+        membersRef.child(id).remove();
+        if (document.getElementById('edit-id').value === id) {
+          resetForm();
+        }
+      }
+    }
+
+    // Calcular Destaques (Hoje / Próximo)
+    function updateHighlights(members) {
+      const today = new Date();
+      const currentDay = today.getDate();
+      const currentMonth = today.getMonth() + 1;
+
+      // Hoje
+      const todaysMembers = members.filter(m => m.day === currentDay && m.month === currentMonth);
+      const todayContainer = document.getElementById('today-content');
+
+      if (todaysMembers.length > 0) {
+        todayContainer.innerHTML = todaysMembers.map(m => `<div>${m.name} 🎉</div>`).join('');
+      } else {
+        todayContainer.innerHTML = '<span class="empty-state">Nenhum hoje</span>';
+      }
+
+      // Próximo
+      const nextContainer = document.getElementById('next-content');
+      
+      const sortedByNext = [...members].map(m => {
+        let diffMonth = m.month - currentMonth;
+        let diffDay = m.day - currentDay;
+
+        if (diffMonth < 0 || (diffMonth === 0 && diffDay < 0)) {
+          diffMonth += 12;
+        }
+
+        const daysDistance = (diffMonth * 31) + diffDay;
+        return { ...m, daysDistance };
+      }).filter(m => m.daysDistance > 0)
+        .sort((a, b) => a.daysDistance - b.daysDistance);
+
+      if (sortedByNext.length > 0) {
+        const next = sortedByNext[0];
+        const dayStr = String(next.day).padStart(2, '0');
+        const monthStr = String(next.month).padStart(2, '0');
+        nextContainer.innerHTML = `
+          <div>${next.name}</div>
+          <div class="subtext">${dayStr}/${monthStr}</div>
+        `;
+      } else {
+        nextContainer.innerHTML = '<span class="empty-state">Sem dados</span>';
+      }
+    }
+
+    // Renderizar Lista
+    membersRef.on('value', (snapshot) => {
+      const container = document.getElementById('members-list');
+      container.innerHTML = '';
+
+      const data = snapshot.val();
+      if (!data) {
+        container.innerHTML = '<div class="empty">Nenhum aniversário cadastrado.</div>';
+        document.getElementById('today-content').innerHTML = '<span class="empty-state">Nenhum hoje</span>';
+        document.getElementById('next-content').innerHTML = '<span class="empty-state">Sem dados</span>';
+        return;
+      }
+
+      const members = [];
+      Object.keys(data).forEach(key => {
+        members.push({
+          id: key,
+          name: data[key].name,
+          day: parseInt(data[key].day, 10),
+          month: parseInt(data[key].month, 10)
+        });
+      });
+
+      updateHighlights(members);
+
+      monthsNames.forEach((monthName, index) => {
+        const monthNumber = index + 1;
+        const monthMembers = members
+          .filter(m => m.month === monthNumber)
+          .sort((a, b) => a.day - b.day);
+
+        if (monthMembers.length > 0) {
+          const section = document.createElement('div');
+          section.className = 'month-section';
+
+          const title = document.createElement('div');
+          title.className = 'month-header';
+          title.innerText = monthName;
+          section.appendChild(title);
+
+          monthMembers.forEach(m => {
+            const dayStr = String(m.day).padStart(2, '0');
+            const monthStr = String(m.month).padStart(2, '0');
+
+            const item = document.createElement('div');
+            item.className = 'member-item';
+            item.innerHTML = `
+              <span class="member-name" title="${m.name}">${m.name}</span>
+              <span class="member-date">${dayStr}/${monthStr}</span>
+              <div class="actions">
+                <button class="btn-action btn-edit" onclick="editMember('${m.id}', '${m.name.replace(/'/g, "\\'")}', ${m.day}, ${m.month})">Editar</button>
+                <button class="btn-action btn-delete" onclick="deleteMember('${m.id}')">Excluir</button>
+              </div>
+            `;
+            section.appendChild(item);
+          });
+
+          container.appendChild(section);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
