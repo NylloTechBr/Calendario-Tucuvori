@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aniversários Tucuvori</title>
+  <title>Aniversários - T.U. Caboclo Ubirajara e Vovó Rita</title>
   
   <!-- Fontes Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,9 +67,7 @@
       position: relative;
     }
 
-    /* ==========================================
-       NOVO CABEÇALHO PROFISSIONAL
-       ========================================== */
+    /* CABEÇALHO */
     header {
       text-align: center;
       margin-bottom: 32px;
@@ -235,6 +233,37 @@
       color: var(--gold);
       font-weight: 600;
       margin-top: 4px;
+    }
+
+    /* Botões de Exportação */
+    .export-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn-export {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 9px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: var(--shadow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-export:hover {
+      border-color: var(--gold);
+      color: var(--gold);
     }
 
     /* Botão Toggle Cadastro (Celular) */
@@ -474,9 +503,9 @@
     <!-- CABEÇALHO -->
     <header>
       <div class="header-top-bar">
-        <span class="header-badge">TUCUVORI</span>
+        <span class="header-badge">Oficial</span>
         <button class="btn-theme" id="theme-toggle" onclick="toggleTheme()">
-          <span id="theme-icon"></span> <span id="theme-text">☀️ / 🌑</span>
+          <span id="theme-icon">☀️</span> <span id="theme-text">Modo Claro</span>
         </button>
       </div>
 
@@ -520,20 +549,30 @@
 
     <!-- Formulário de Cadastro / Edição -->
     <div class="form-card" id="form-card">
-      <h2 id="form-title">Cadastrar Aniversário</h2>
+      <h2 id="form-title">Novo Cadastramento</h2>
       <form id="add-form">
         <input type="hidden" id="edit-id" value="">
         <div class="form-row">
-          <input type="text" id="name" placeholder="Nome" required>
+          <input type="text" id="name" placeholder="Nome do membro" required>
         </div>
         <div class="form-row">
-          <input type="text" id="date" placeholder="Dia / Mês" maxlength="5" required>
+          <input type="text" id="date" placeholder="Dia e Mês (ex: 15/08)" maxlength="5" required>
         </div>
         <div class="btn-group">
           <button type="submit" id="btn-submit" class="btn-submit">Cadastrar Membro</button>
           <button type="button" id="btn-cancel" class="btn-cancel" onclick="resetForm()">Cancelar</button>
         </div>
       </form>
+    </div>
+
+    <!-- Barra de Exportação -->
+    <div class="export-bar">
+      <button class="btn-export" onclick="exportToPDF()">
+        📄 Exportar PDF
+      </button>
+      <button class="btn-export" onclick="exportToExcel()">
+        📊 Exportar Excel
+      </button>
     </div>
 
     <!-- Lista Completa -->
@@ -544,12 +583,17 @@
 
   <!-- Rodapé -->
   <footer>
-    © 2026 Nyllo Tech. Todos os Direitos Reservados.
+    Produzido por Nyllo Tech 2026
   </footer>
 
   <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <!-- Bibliotecas de Exportação (PDF e Excel) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -565,6 +609,8 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     const membersRef = database.ref('membros');
+
+    let globalMembersList = [];
 
     const monthsNames = [
       'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -750,6 +796,117 @@
       }
     }
 
+    // EXPORTAÇÃO PARA EXCEL
+    function exportToExcel() {
+      if (!globalMembersList || globalMembersList.length === 0) {
+        alert('Não há dados disponíveis para exportar.');
+        return;
+      }
+
+      const rows = [];
+      monthsNames.forEach((monthName, index) => {
+        const monthNumber = index + 1;
+        const monthMembers = globalMembersList
+          .filter(m => m.month === monthNumber)
+          .sort((a, b) => a.day - b.day);
+
+        monthMembers.forEach(m => {
+          const dayStr = String(m.day).padStart(2, '0');
+          const monthStr = String(m.month).padStart(2, '0');
+          rows.push({
+            "Mês": monthName,
+            "Nome do Membro": m.name,
+            "Data de Aniversário": `${dayStr}/${monthStr}`
+          });
+        });
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Aniversariantes");
+
+      XLSX.writeFile(workbook, "Aniversariantes_TUCUVORI.xlsx");
+    }
+
+    // EXPORTAÇÃO PARA PDF (Estruturado por Mês)
+    function exportToPDF() {
+      if (!globalMembersList || globalMembersList.length === 0) {
+        alert('Não há dados disponíveis para exportar.');
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Cabeçalho Institucional
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(15);
+      doc.setTextColor(139, 0, 0); // Vermelho institucional
+      doc.text("Templo de Umbanda Caboclo Ubirajara e Vovo Rita", 14, 18);
+      
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(80, 80, 80);
+      doc.text("Relatorio Oficial de Aniversarios", 14, 25);
+
+      const tableBody = [];
+
+      monthsNames.forEach((monthName, index) => {
+        const monthNumber = index + 1;
+        const monthMembers = globalMembersList
+          .filter(m => m.month === monthNumber)
+          .sort((a, b) => a.day - b.day);
+
+        if (monthMembers.length > 0) {
+          // Linha divisória de Seção do Mês
+          tableBody.push([
+            {
+              content: monthName.toUpperCase(),
+              colSpan: 2,
+              styles: {
+                fillColor: [230, 226, 220],
+                textColor: [141, 110, 24], // Dourado escuro
+                fontStyle: 'bold',
+                halign: 'left',
+                fontSize: 10
+              }
+            }
+          ]);
+
+          // Membros do Mês
+          monthMembers.forEach(m => {
+            const dayStr = String(m.day).padStart(2, '0');
+            const monthStr = String(m.month).padStart(2, '0');
+            tableBody.push([m.name, `${dayStr}/${monthStr}`]);
+          });
+        }
+      });
+
+      doc.autoTable({
+        startY: 32,
+        head: [['Nome do Membro', 'Data']],
+        body: tableBody,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [139, 0, 0],
+          textColor: [255, 255, 255],
+          fontStyle: 'bold',
+          fontSize: 10
+        },
+        columnStyles: {
+          0: { cellWidth: 'auto' },
+          1: { cellWidth: 40, halign: 'center' }
+        },
+        styles: {
+          fontSize: 9,
+          cellPadding: 3.5,
+          textColor: [30, 30, 30]
+        }
+      });
+
+      doc.save("Aniversariantes_TUCUVORI.pdf");
+    }
+
     // Renderizar Lista
     membersRef.on('value', (snapshot) => {
       const container = document.getElementById('members-list');
@@ -757,6 +914,7 @@
 
       const data = snapshot.val();
       if (!data) {
+        globalMembersList = [];
         container.innerHTML = '<div class="empty">Nenhum aniversário cadastrado.</div>';
         document.getElementById('today-content').innerHTML = '<span class="empty-state">Nenhum hoje</span>';
         document.getElementById('next-content').innerHTML = '<span class="empty-state">Sem dados</span>';
@@ -773,6 +931,7 @@
         });
       });
 
+      globalMembersList = members;
       updateHighlights(members);
 
       monthsNames.forEach((monthName, index) => {
