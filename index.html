@@ -8,7 +8,7 @@
   <!-- Fontes Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* MODO ESCURO (Preto #000, Vermelho #8b0000, Dourado) */
@@ -28,15 +28,15 @@
 
     /* MODO CLARO (Fundo Bege Acinzentado, Azul, Dourado Escuro) */
     [data-theme="light"] {
-      --bg: #e5e2dc; /* Bege acinzentado / areia suave */
-      --surface: #f7f6f2; /* Cartão gesso/off-white */
+      --bg: #e5e2dc;
+      --surface: #f7f6f2;
       --surface-card: #ebe8e2;
       --text-primary: #1e293b;
       --text-secondary: #64748b;
-      --gold: #8d6e18; /* Dourado escuro */
+      --gold: #8d6e18;
       --gold-soft: rgba(141, 110, 24, 0.12);
-      --red: #1d4ed8; /* Azul principal */
-      --red-hover: #1e40af; /* Azul hover */
+      --red: #1d4ed8;
+      --red-hover: #1e40af;
       --border: #d4d0c7;
       --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
     }
@@ -51,7 +51,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg);
       color: var(--text-primary);
-      padding: 40px 16px 20px 16px;
+      padding: 30px 16px 20px 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -67,20 +67,41 @@
       position: relative;
     }
 
-    /* Botão Alternar Tema */
-    .theme-toggle-container {
+    /* ==========================================
+       NOVO CABEÇALHO PROFISSIONAL
+       ========================================== */
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .header-top-bar {
       display: flex;
-      justify-content: flex-end;
-      margin-bottom: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .header-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: var(--gold-soft);
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--gold);
     }
 
     .btn-theme {
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text-primary);
-      padding: 6px 12px;
+      padding: 5px 12px;
       border-radius: 20px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
@@ -94,27 +115,71 @@
       border-color: var(--gold);
     }
 
-    /* Cabeçalho */
-    header {
-      text-align: center;
-      margin-bottom: 28px;
+    .header-icon {
+      width: 44px;
+      height: 44px;
+      margin: 8px auto 12px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      box-shadow: var(--shadow);
+    }
+
+    .header-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
     }
 
     header h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.7rem;
+      font-family: 'Cinzel', serif;
+      font-size: 1.45rem;
       font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.8px;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+
+    header h1 span {
       color: var(--gold);
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-      line-height: 1.2;
+      display: block;
+      font-size: 1.1rem;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    .header-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 14px 0 10px 0;
+    }
+
+    .header-divider .line {
+      height: 1px;
+      width: 50px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .header-divider .dot {
+      width: 5px;
+      height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
     }
 
     header p {
       color: var(--text-secondary);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 2.5px;
       font-weight: 600;
     }
 
@@ -206,13 +271,14 @@
     }
 
     .form-card h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.2rem;
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 16px;
       color: var(--gold);
       border-bottom: 1px solid var(--border);
       padding-bottom: 8px;
+      letter-spacing: 0.5px;
     }
 
     .form-row {
@@ -288,14 +354,15 @@
     }
 
     .month-header {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.3rem;
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
       font-weight: 700;
       color: var(--gold);
       padding-bottom: 4px;
       border-bottom: 1px solid var(--gold);
       margin-bottom: 12px;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .member-item {
@@ -403,16 +470,35 @@
 <body>
 
   <div class="container">
-    <!-- Alternador de Tema -->
-    <div class="theme-toggle-container">
-      <button class="btn-theme" id="theme-toggle" onclick="toggleTheme()">
-        <span id="theme-icon">☀️</span> <span id="theme-text">Modo Claro</span>
-      </button>
-    </div>
-
+    
+    <!-- CABEÇALHO -->
     <header>
-      <h1>T.U. Caboclo Ubirajara e Vovó Rita</h1>
-      <p>Calendário de Aniversários</p>
+      <div class="header-top-bar">
+        <span class="header-badge">TUCUVORI</span>
+        <button class="btn-theme" id="theme-toggle" onclick="toggleTheme()">
+          <span id="theme-icon"></span> <span id="theme-text">☀️ / 🌑</span>
+        </button>
+      </div>
+
+      <!-- Ícone Emblema -->
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+        </svg>
+      </div>
+
+      <h1>
+        Templo de Umbanda
+        <span>Caboclo Ubirajara e Vovó Rita</span>
+      </h1>
+
+      <div class="header-divider">
+        <div class="line"></div>
+        <div class="dot"></div>
+        <div class="line"></div>
+      </div>
+
+      <p>Registro Geral de Aniversários</p>
     </header>
 
     <!-- Destaques -->
@@ -434,14 +520,14 @@
 
     <!-- Formulário de Cadastro / Edição -->
     <div class="form-card" id="form-card">
-      <h2 id="form-title">Novo Cadastramento</h2>
+      <h2 id="form-title">Cadastrar Aniversário</h2>
       <form id="add-form">
         <input type="hidden" id="edit-id" value="">
         <div class="form-row">
-          <input type="text" id="name" placeholder="Nome do membro" required>
+          <input type="text" id="name" placeholder="Nome" required>
         </div>
         <div class="form-row">
-          <input type="text" id="date" placeholder="Dia e Mês (ex: 15/08)" maxlength="5" required>
+          <input type="text" id="date" placeholder="Dia / Mês" maxlength="5" required>
         </div>
         <div class="btn-group">
           <button type="submit" id="btn-submit" class="btn-submit">Cadastrar Membro</button>
@@ -458,7 +544,7 @@
 
   <!-- Rodapé -->
   <footer>
-    Produzido por Nyllo Tech 2026
+    © 2026 Nyllo Tech. Todos os Direitos Reservados.
   </footer>
 
   <!-- Firebase Scripts -->
